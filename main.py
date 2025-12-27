@@ -2,6 +2,8 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
 
 data = pd.read_csv('data/spam.csv', sep='\t', header=None, names=['label', 'message'], encoding='latin-1')
 
@@ -49,3 +51,11 @@ X_test_tfidf = vectorizer.transform(X_test)
 
 print("X_train_tfidf shape:", X_train_tfidf.shape)
 print("X_test_tfidf shape:", X_test_tfidf.shape)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train_tfidf, Y_train)
+
+Y_pred = model.predict(X_test_tfidf)
+
+print("Accuracy:", accuracy_score(Y_test, Y_pred))
+print("Classification Report:\n", classification_report(Y_test, Y_pred))
